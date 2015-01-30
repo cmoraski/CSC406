@@ -1,0 +1,30 @@
+package asgn01;
+
+public class ALNode {
+	
+	private Node theNode;
+	private int weight;
+	private ALNode nextNode;
+	
+	public ALNode(Node node, int w){
+		this.theNode = node;
+		this.weight = w;
+		this.nextNode = null;
+	}
+	
+	public Node getNode(){
+		return theNode;
+	}
+	
+	public int getWeight(){
+		return weight;
+	}
+	
+	public ALNode getNextNode(){
+		return nextNode;
+	}
+	
+	public void setNextNode(ALNode node){
+		this.nextNode = node;
+	}
+}
