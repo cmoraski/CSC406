@@ -1,0 +1,8 @@
+//Adjacency Matrix Weighted Directed Graph
+public class AMWDG extends AMGraph{
+	
+	public AMWDG(){
+		super();
+	}
+	
+}
