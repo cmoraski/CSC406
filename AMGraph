@@ -1,0 +1,82 @@
+package asgn01;
+
+import java.util.ArrayList;
+
+public abstract class AMGraph extends Graph{
+	
+	protected int[][] theGraph;
+	
+	public AMGraph(){
+		super();
+		theGraph = new int[20][20];
+	}
+	
+	public boolean existsEdge(int i, int j){
+		if (theGraph[i][j] > 0)
+			return true;
+		if (theGraph[j][i] > 0)
+			return true;
+		return false;
+	}
+	
+	public void putEdge(int i, int j, int weight){
+		if (weight == 0)
+			theGraph[i][j] = 1;
+		else
+			theGraph[i][j] = weight;
+		
+		outDegree[i] = outDegree[i] + 1;
+		inDegree[j] = inDegree[j] + 1;
+		allEdges.add(new Edge(allNodes.get(i), allNodes.get(j), weight));
+	}
+	
+	public void removeEdge(int i, int j){
+		theGraph[i][j] = 0;
+		outDegree[i] = outDegree[i] - 1;
+		inDegree[j] = inDegree[j] - 1;
+		allEdges.remove(new Edge(new Node(i),new Node(j),theGraph[i][j]));
+	}
+
+	public int degree(int i){
+//		int count = 0;
+//		for (int j = 0; j < theGraph.length; j++){
+//			if (theGraph[j][i] > 0)
+//				count++;
+//		}
+//		for (int j = 0; j < theGraph[i].length; j++){
+//			if (theGraph[i][j] > 0)
+//				count++;
+//		}
+//		return count;
+		return 0;
+	}
+	
+	public int inDegree(int i){
+		return inDegree[i];
+	}
+	
+	public int outDegree(int i){
+		return outDegree[i];
+	}
+	
+	public ArrayList<Node> adjacentVertices(int i){
+		ArrayList<Node> theAdjacent = new ArrayList<Node>();
+		for (int j = 0; j < theGraph[i].length; j++){
+			if (theGraph[i][j] > 0)
+				theAdjacent.add(new Node(j));
+		}
+		for (int j = 0; j < theGraph.length; j++){
+			if (theGraph[j][i] > 0)
+				theAdjacent.add(new Node(j));
+		}
+		return theAdjacent;
+	}
+	
+	public boolean areAdjacent(int i, int j){
+		if (theGraph[i][j] > 0)
+			return true;
+		else if (theGraph[j][i] > 0)
+			return true;
+		return false;
+	}
+}
