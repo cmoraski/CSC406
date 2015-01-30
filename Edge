@@ -1,0 +1,31 @@
+public class Edge {
+	
+	private Node beginningNode;
+	private Node endingNode;
+	private int weight;
+	
+	public Edge(Node bN, Node eN, int w){
+		this.beginningNode = bN;
+		this.endingNode = eN;
+		this.weight = w;
+	}
+	
+	public Node getBeginningNode(){
+		return beginningNode;
+	}
+	
+	public Node getEndingNode(){
+		return endingNode;
+	}
+	
+	public int getWeight(){
+		return weight;
+	}
+	
+	public boolean equals(Edge otherEdge){
+		if (this.beginningNode.equals(otherEdge.beginningNode) && this.endingNode.equals(otherEdge.endingNode))
+			return true;
+		else
+			return false;
+	}
+}
