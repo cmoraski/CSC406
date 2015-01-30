@@ -1,0 +1,8 @@
+//Adjacency Matrix Directed Graph
+public class AMDG extends Graph{
+
+	public AMDG(){
+		super();
+	}
+	
+}
