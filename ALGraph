@@ -1,0 +1,81 @@
+package asgn01;
+
+import java.util.ArrayList;
+
+public abstract class ALGraph extends Graph{
+
+	protected ALNode[] theGraph;
+
+	public ALGraph(){
+		super();
+		theGraph = new ALNode[20];
+	}
+
+	public boolean existsEdge(Edge e){
+		if (allEdges.contains(e))
+			return true;
+		return false;
+	}
+
+	public void putEdge(Edge e){
+		theGraph[e.getBeginningNode().getNodeNum()] = new ALNode(e.getEndingNode(), e.getWeight());
+		outDegree[e.getBeginningNode().getNodeNum()] = outDegree[e.getBeginningNode().getNodeNum()] + 1;
+		inDegree[e.getEndingNode().getNodeNum()] = inDegree[e.getEndingNode().getNodeNum()] + 1;
+		allEdges.add(e);
+	}
+
+	public void removeEdge(Edge e){
+		ALNode currNode = theGraph[e.getBeginningNode().getNodeNum()];
+		if (e.getEndingNode().equals(currNode.getNode())){
+			theGraph[e.getBeginningNode().getNodeNum()] = currNode.getNextNode();
+			allEdges.remove(e);
+			return;
+		}
+		ALNode prevNode = currNode;
+		currNode = currNode.getNextNode();
+		while (currNode != null){
+			if (e.getEndingNode().equals(currNode.getNode())){
+				prevNode.setNextNode(currNode.getNextNode());
+				allEdges.remove(e);
+				return;
+			}
+			prevNode = currNode;
+			currNode = currNode.getNextNode();
+		}
+
+	}
+	
+	public int inDegree(Node n){
+		return inDegree[n.getNodeNum()];
+	}
+
+	public int outDegree(Node n){
+		return outDegree[n.getNodeNum()];
+	}
+
+	public ArrayList<Node> adjacentVertices(Node n){
+		ArrayList<Node> vertices = new ArrayList<Node>();
+		ALNode theNode = theGraph[n.getNodeNum()];
+		while(theNode != null){
+			if (theNode.getNode().equals(n))
+				vertices.add(theNode.getNode());
+			theNode = theNode.getNextNode();
+		}
+		return vertices;
+	}
+
+	public boolean areAdjacent(Node n, Node o){
+		ALNode theNode = theGraph[n.getNodeNum()];
+		while(theNode != null){
+			if (theNode.getNode().equals(o))
+				return true;
+		}
+		theNode = theGraph[o.getNodeNum()];
+		while(theNode != null){
+			if (theNode.getNode().equals(n))
+				return true;
+		}
+		return false;
+	}
+}
+
