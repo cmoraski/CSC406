@@ -1,0 +1,48 @@
+package asgn01;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+/*
+ * Name: Corey Moraski
+ * Course: CSC 406 Algorithms & Data Structures
+ * Semester: Spring 2015
+ * Assignment #1
+ * Assigned: January 26th, 2015
+ * Due: On or before February 12th, 2015
+ */
+public class GraphTester {
+
+	public static void main(String[]args){
+		final JFrame thisFrame = new JFrame();
+		Object[] theArray = new Object[1];
+		final JComboBox<String> theBox = new JComboBox<String>(new String[] {"", "AMWDG", "AMDG", "ALWDG", "ALDG"});
+		theBox.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				if (theBox.getSelectedItem().equals("AMWDG")){
+					thisFrame.setVisible(false);
+					new AMWDG();
+				}
+				else if (theBox.getSelectedItem().equals("AMDG")){
+					thisFrame.setVisible(false);
+					new AMDG();
+				}
+				else if (theBox.getSelectedItem().equals("ALWDG")){
+					thisFrame.setVisible(false);
+					new ALWDG();
+				}
+				else if (theBox.getSelectedItem().equals("ALDG")){
+					thisFrame.setVisible(false);
+					new ALDG();
+				}
+			}
+		});
+		theArray[0] = theBox;
+		JOptionPane.showOptionDialog(thisFrame, null, "Please Choose a Graph", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, theArray, null);
+	}
+	
+}
