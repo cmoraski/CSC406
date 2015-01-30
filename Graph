@@ -1,0 +1,27 @@
+package asgn01;
+
+import java.util.ArrayList;
+
+public abstract class Graph {
+
+	protected ArrayList<Node> allNodes;
+	protected ArrayList<Edge> allEdges;
+	protected int[] inDegree;
+	protected int[] outDegree;
+	
+	public Graph(){
+		allNodes = new ArrayList<Node>();
+		allEdges = new ArrayList<Edge>();
+		inDegree = new int[50];
+		outDegree = new int[50];
+	}
+	
+	public int numNodes(){
+		return allNodes.size();
+	}
+	
+	public int numEdges(){
+		return allEdges.size();
+	}
+	
+}
