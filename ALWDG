@@ -1,0 +1,7 @@
+public class ALWDG extends ALGraph{
+
+	public ALWDG(){
+		super();
+	}
+	
+}
