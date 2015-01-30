@@ -1,0 +1,21 @@
+package asgn01;
+
+public class Node {
+
+	private int nodeNum;
+	
+	public Node(int nN){
+		this.nodeNum = nN;
+	}
+	
+	public int getNodeNum(){
+		return nodeNum;
+	}
+	
+	public boolean equals(Node otherNode){
+		if (this.nodeNum == otherNode.nodeNum)
+			return true;
+		else
+			return false;
+	}
+}
