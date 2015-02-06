@@ -1,8 +1,13 @@
+package asgn01;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
 //Adjacency Matrix Weighted Directed Graph
 public class AMWDG extends AMGraph{
 	
-	public AMWDG(){
-		super();
+	public AMWDG(Scanner sc){
+		super(sc, true, true);
 	}
 	
 }
