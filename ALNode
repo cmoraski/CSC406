@@ -6,20 +6,20 @@ public class ALNode {
 	private int weight;
 	private ALNode nextNode;
 	
-	public ALNode(Node node, int w){
+	public ALNode(Node node, int w, ALNode nN){
 		this.theNode = node;
 		this.weight = w;
-		this.nextNode = null;
-	}
-	
-	public Node getNode(){
-		return theNode;
+		this.nextNode = nN;
 	}
 	
 	public int getWeight(){
 		return weight;
 	}
 	
+	public Node getNode(){
+		return theNode;
+	}
+		
 	public ALNode getNextNode(){
 		return nextNode;
 	}
