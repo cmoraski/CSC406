@@ -1,3 +1,5 @@
+package asgn01;
+
 public class Edge {
 	
 	private Node beginningNode;
@@ -23,7 +25,8 @@ public class Edge {
 	}
 	
 	public boolean equals(Edge otherEdge){
-		if (this.beginningNode.equals(otherEdge.beginningNode) && this.endingNode.equals(otherEdge.endingNode))
+		if ((this.beginningNode.equals(otherEdge.beginningNode) && this.endingNode.equals(otherEdge.endingNode))
+				|| (this.beginningNode.equals(otherEdge.endingNode) && this.endingNode.equals(otherEdge.beginningNode)))
 			return true;
 		else
 			return false;
