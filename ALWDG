@@ -1,7 +1,12 @@
+package asgn01;
+
+import java.util.Scanner;
+
+//Adjacency List Weighted Directed Graph
 public class ALWDG extends ALGraph{
 
-	public ALWDG(){
-		super();
+	public ALWDG(Scanner sc){
+		super(sc, true, true);
 	}
 	
 }
