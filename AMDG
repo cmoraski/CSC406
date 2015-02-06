@@ -1,8 +1,13 @@
-//Adjacency Matrix Directed Graph
-public class AMDG extends Graph{
+package asgn01;
 
-	public AMDG(){
-		super();
+import java.util.Scanner;
+
+//Adjacency Matrix Directed Graph
+public class AMDG extends AMGraph{
+
+	public AMDG(Scanner sc){
+		super(sc, false, true);
 	}
+
 	
 }
