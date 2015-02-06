@@ -2,6 +2,9 @@ package asgn01;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -18,31 +21,76 @@ import javax.swing.JOptionPane;
 public class GraphTester {
 
 	public static void main(String[]args){
-		final JFrame thisFrame = new JFrame();
-		Object[] theArray = new Object[1];
-		final JComboBox<String> theBox = new JComboBox<String>(new String[] {"", "AMWDG", "AMDG", "ALWDG", "ALDG"});
-		theBox.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				if (theBox.getSelectedItem().equals("AMWDG")){
-					thisFrame.setVisible(false);
-					new AMWDG();
-				}
-				else if (theBox.getSelectedItem().equals("AMDG")){
-					thisFrame.setVisible(false);
-					new AMDG();
-				}
-				else if (theBox.getSelectedItem().equals("ALWDG")){
-					thisFrame.setVisible(false);
-					new ALWDG();
-				}
-				else if (theBox.getSelectedItem().equals("ALDG")){
-					thisFrame.setVisible(false);
-					new ALDG();
-				}
-			}
-		});
-		theArray[0] = theBox;
-		JOptionPane.showOptionDialog(thisFrame, null, "Please Choose a Graph", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, theArray, null);
-	}
+		Scanner sc = null;//= new Scanner(System.in);
+		//System.out.print("Please give the file path: ");
+		try {
+			sc = new Scanner (new File ("assign1Test.txt"));//sc.next()));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		String graphType = sc.nextLine();
+		Graph thisGraph = null;
+		if (graphType.equals("ALWDG")){
+			thisGraph = new ALWDG(sc);
+		}
+		else if (graphType.equals("AMWDG")){
+			thisGraph = new AMWDG(sc);
+		}
+		else if (graphType.equals("ALDG")){
+			thisGraph = new ALDG(sc);
+		}
+		else if (graphType.equals("AMDG")){
+			thisGraph = new AMDG(sc);
+		}
 	
+ 		System.out.println("Node 0 has an out degree of: " + thisGraph.outDegree(0));
+		System.out.println("Node 1 has an out degree of: " + thisGraph.outDegree(1));
+		System.out.println("Node 2 has an out degree of: " + thisGraph.outDegree(2));
+		System.out.println("Node 3 has an out degree of: " + thisGraph.outDegree(3));
+		System.out.println("Node 4 has an out degree of: " + thisGraph.outDegree(4));
+		
+		
+		System.out.println("Node 0 has an in degree of: " + thisGraph.inDegree(0));
+		System.out.println("Node 1 has an in degree of: " + thisGraph.inDegree(1));
+		System.out.println("Node 2 has an in degree of: " + thisGraph.inDegree(2));
+		System.out.println("Node 3 has an in degree of: " + thisGraph.inDegree(3));
+		System.out.println("Node 4 has an in degree of: " + thisGraph.inDegree(4));
+
+		System.out.println("The Graph contains and edge from Node 3 to Node 4: " + thisGraph.existEdge(3,4));
+		thisGraph.removeEdge(3,4);
+		System.out.println("The Graph contains and edge from Node 3 to Node 4: " + thisGraph.existEdge(3,4));
+		thisGraph.putEdge(3,4,4);
+		System.out.println("The Graph contains and edge from Node 3 to Node 4: " + thisGraph.existEdge(3,4));
+
+		System.out.println("Nodes adjacent to Node 1 are: " + thisGraph.adjacentVertices(1).toString());
+		thisGraph.removeEdge(1,4);
+		System.out.println("Nodes adjacent to Node 1 are: " + thisGraph.adjacentVertices(1).toString());
+
+
+/*		System.out.println("Node 0 has an out degree of: " + thisGraph.outDegree(new Node(0)));
+		System.out.println("Node 1 has an out degree of: " + thisGraph.outDegree(new Node(1)));
+		System.out.println("Node 2 has an out degree of: " + thisGraph.outDegree(new Node(2)));
+		System.out.println("Node 3 has an out degree of: " + thisGraph.outDegree(new Node(3)));
+		System.out.println("Node 4 has an out degree of: " + thisGraph.outDegree(new Node(4)));
+		
+		
+		System.out.println("Node 0 has an in degree of: " + thisGraph.inDegree(new Node(0)));
+		System.out.println("Node 1 has an in degree of: " + thisGraph.inDegree(new Node(1)));
+		System.out.println("Node 2 has an in degree of: " + thisGraph.inDegree(new Node(2)));
+		System.out.println("Node 3 has an in degree of: " + thisGraph.inDegree(new Node(3)));
+		System.out.println("Node 4 has an in degree of: " + thisGraph.inDegree(new Node(4)));
+		
+		System.out.println("The Graph contains and edge from Node 3 to Node 4: " + thisGraph.existEdge(new Edge(new Node(3), new Node(4),4)));
+		thisGraph.removeEdge(new Edge(new Node(3), new Node(4), 4));
+		System.out.println("The Graph contains and edge from Node 3 to Node 4: " + thisGraph.existEdge(new Edge(new Node(3), new Node(4),4)));
+		thisGraph.putEdge(new Edge(new Node(3), new Node(4), 4));
+		System.out.println("The Graph contains and edge from Node 3 to Node 4: " + thisGraph.existEdge(new Edge(new Node(3), new Node(4),4)));
+		
+		System.out.println("Nodes adjacent to Node 1 are: " + thisGraph.adjacentVertices(new Node(1)).toString());
+		thisGraph.removeEdge(new Edge(new Node(1),new Node(4), 4));
+		System.out.println("Nodes adjacent to Node 1 are: " + thisGraph.adjacentVertices(new Node(1)).toString());
+		
+		System.out.println("Are Nodes 1 and 2 adjacent? " + thisGraph.areAdjacent(new Node(1), new Node(2)));
+		System.out.println("Are Nodes 2 and 1 adjacent? " + thisGraph.areAdjacent(new Node(2), new Node(1)));*/
+	}
 }
