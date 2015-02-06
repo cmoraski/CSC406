@@ -1,27 +1,132 @@
 package asgn01;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public abstract class Graph {
 
-	protected ArrayList<Node> allNodes;
-	protected ArrayList<Edge> allEdges;
+	protected Node[] allNodes;
+	protected Edge[] allEdges;
 	protected int[] inDegree;
 	protected int[] outDegree;
-	
-	public Graph(){
-		allNodes = new ArrayList<Node>();
-		allEdges = new ArrayList<Edge>();
-		inDegree = new int[50];
-		outDegree = new int[50];
+
+	public Graph(Scanner sc, boolean isWeighted, boolean isDirected, boolean isMatrix){
+		int numNodes = Integer.parseInt(sc.nextLine());
+		int numEdges = Integer.parseInt(sc.nextLine());
+		allNodes = new Node[numNodes];
+		if (isDirected)
+			allEdges = new Edge[numEdges];
+		else
+			allEdges = new Edge[numEdges*2];
+		inDegree = new int[numNodes];
+		outDegree = new int[numNodes];
+
+		String[] theEdges = sc.nextLine().split(" ");
+
+		initializeGraph();
+		
+		//Initializing all the nodes into the array
+		for (int i = 0; i < allNodes.length; i++){
+			allNodes[i] = new Node(i);
+		}
+
+		int count = 0;
+		if (isWeighted){
+			if (isDirected){
+				for (int i = 0; i < theEdges.length; i+=3){
+					allEdges[count] = new Edge(allNodes[Integer.parseInt(theEdges[i])], allNodes[Integer.parseInt(theEdges[i+1])], Integer.parseInt(theEdges[i+2]));
+					if (isMatrix)
+						putEdge(Integer.parseInt(theEdges[i]), Integer.parseInt(theEdges[i+1]), Integer.parseInt(theEdges[i+2]));
+					else
+						putEdge(allEdges[count]);
+					count++;
+				}
+			}
+			else if (!isDirected){
+				for (int i = 0; i < theEdges.length; i+=3){
+					//Adds the Edge the first way
+					allEdges[count] = new Edge(allNodes[Integer.parseInt(theEdges[i])], allNodes[Integer.parseInt(theEdges[i+1])], Integer.parseInt(theEdges[i+2]));
+					if (isMatrix)
+						putEdge(Integer.parseInt(theEdges[i]), Integer.parseInt(theEdges[i+1]), Integer.parseInt(theEdges[i+2]));
+					else
+						putEdge(allEdges[count]);
+					count++;
+					
+					//Adds the Edge the second way
+					allEdges[count] = new Edge(allNodes[Integer.parseInt(theEdges[i+1])], allNodes[Integer.parseInt(theEdges[i])], Integer.parseInt(theEdges[i+2]));
+					if (isMatrix)
+						putEdge(Integer.parseInt(theEdges[i+1]), Integer.parseInt(theEdges[i]), Integer.parseInt(theEdges[i+2]));
+					else
+						putEdge(allEdges[count]);
+					count++;
+				}
+			}
+		}
+		else if (!isWeighted){
+			if (isDirected){
+				for (int i = 0; i < theEdges.length; i+=2){
+					allEdges[count] = new Edge(allNodes[Integer.parseInt(theEdges[i])], allNodes[Integer.parseInt(theEdges[i+1])], 0);
+					if (isMatrix)
+						putEdge(Integer.parseInt(theEdges[i]), Integer.parseInt(theEdges[i+1]), 0);
+					else
+						putEdge(allEdges[count]);
+					count++;
+				}
+			}
+			else if (!isDirected){
+				for (int i = 0; i < theEdges.length; i+=2){
+					allEdges[count] = new Edge(allNodes[Integer.parseInt(theEdges[i])], allNodes[Integer.parseInt(theEdges[i+1])], 0);
+					if (isMatrix)
+						putEdge(Integer.parseInt(theEdges[i]), Integer.parseInt(theEdges[i+1]), 0);
+					else
+						putEdge(allEdges[count]);
+					count++;
+					
+					allEdges[count] = new Edge(allNodes[Integer.parseInt(theEdges[i+1])], allNodes[Integer.parseInt(theEdges[i])], 0);
+					if (isMatrix)
+						putEdge(Integer.parseInt(theEdges[i]), Integer.parseInt(theEdges[i+1]), 0);
+					else
+						putEdge(allEdges[count]);
+					count++;
+				}
+			}
+		}
+
 	}
 	
 	public int numNodes(){
-		return allNodes.size();
+		return allNodes.length;
 	}
-	
+
 	public int numEdges(){
-		return allEdges.size();
+		return allEdges.length;
 	}
+
+	public abstract boolean existEdge(Edge e);
+	public abstract boolean existEdge(int i, int j);
 	
+	public abstract void putEdge(Edge e);
+	public abstract void putEdge(int i, int j, int weight);
+	
+	public abstract void removeEdge(Edge e);
+	public abstract void removeEdge(int i, int j);
+	
+	public abstract int degree(Node n);
+	public abstract int degree(int i);
+	
+	public abstract int inDegree(Node n);
+	public abstract int inDegree(int i);
+	
+	public abstract int outDegree(Node n);
+	public abstract int outDegree(int i);
+	
+	public abstract ArrayList<Node> adjacentVertices(Node n);
+	public abstract ArrayList<Node> adjacentVertices(int i);
+	
+	public abstract boolean areAdjacent(Node n, Node i);
+	public abstract boolean areAdjacent(int i, int j);
+	
+	public abstract void initializeGraph();
 }
