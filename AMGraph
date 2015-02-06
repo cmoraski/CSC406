@@ -1,17 +1,17 @@
 package asgn01;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public abstract class AMGraph extends Graph{
 	
 	protected int[][] theGraph;
 	
-	public AMGraph(){
-		super();
-		theGraph = new int[20][20];
+	public AMGraph(Scanner sc, boolean isWeighted, boolean isDirected){
+		super(sc, isWeighted, isDirected, true);
 	}
 	
-	public boolean existsEdge(int i, int j){
+	public boolean existEdge(int i, int j){
 		if (theGraph[i][j] > 0)
 			return true;
 		if (theGraph[j][i] > 0)
@@ -24,32 +24,17 @@ public abstract class AMGraph extends Graph{
 			theGraph[i][j] = 1;
 		else
 			theGraph[i][j] = weight;
-		
-		outDegree[i] = outDegree[i] + 1;
-		inDegree[j] = inDegree[j] + 1;
-		allEdges.add(new Edge(allNodes.get(i), allNodes.get(j), weight));
+		outDegree[i]++;
+		inDegree[j]++;
 	}
 	
 	public void removeEdge(int i, int j){
 		theGraph[i][j] = 0;
-		outDegree[i] = outDegree[i] - 1;
-		inDegree[j] = inDegree[j] - 1;
-		allEdges.remove(new Edge(new Node(i),new Node(j),theGraph[i][j]));
+		outDegree[i]--;
+		inDegree[j]--;
 	}
 
-	public int degree(int i){
-//		int count = 0;
-//		for (int j = 0; j < theGraph.length; j++){
-//			if (theGraph[j][i] > 0)
-//				count++;
-//		}
-//		for (int j = 0; j < theGraph[i].length; j++){
-//			if (theGraph[i][j] > 0)
-//				count++;
-//		}
-//		return count;
-		return 0;
-	}
+	public int degree(int i){ return -1; }
 	
 	public int inDegree(int i){
 		return inDegree[i];
@@ -65,18 +50,34 @@ public abstract class AMGraph extends Graph{
 			if (theGraph[i][j] > 0)
 				theAdjacent.add(new Node(j));
 		}
-		for (int j = 0; j < theGraph.length; j++){
-			if (theGraph[j][i] > 0)
-				theAdjacent.add(new Node(j));
-		}
 		return theAdjacent;
 	}
 	
 	public boolean areAdjacent(int i, int j){
+		if (i >= allNodes.length || j >= allNodes.length)
+			return false;
 		if (theGraph[i][j] > 0)
-			return true;
-		else if (theGraph[j][i] > 0)
 			return true;
 		return false;
 	}
+	
+	public void initializeGraph(){
+		theGraph = new int[allNodes.length][allNodes.length];
+	}
+	
+	public boolean existEdge(Edge e) { return false; }
+
+	public void putEdge(Edge e) { }
+
+	public void removeEdge(Edge e) { }
+	
+	public int degree(Node n) { return -1; }
+
+	public int inDegree(Node n) { return -1; }
+
+	public int outDegree(Node n) { return -1; }
+
+	public ArrayList<Node> adjacentVertices(Node n) { return null; }
+
+	public boolean areAdjacent(Node n, Node i) { return false; }
 }
