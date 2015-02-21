@@ -1,0 +1,70 @@
+package asgn02;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class AMWG extends AMGraph {
+
+	public AMWG(Scanner sc){
+		super(sc);
+
+		degree = new int[numNodes];
+
+		String[] theEdges = sc.nextLine().split(" ");
+
+		for(int i = 0; i < theEdges.length; i+=3){
+			putEdge(Integer.parseInt(theEdges[i]), Integer.parseInt(theEdges[i+1]), Integer.parseInt(theEdges[i+2]));
+			putEdge(Integer.parseInt(theEdges[i+1]), Integer.parseInt(theEdges[i]), Integer.parseInt(theEdges[i+2]));
+		}
+	}
+
+	public boolean existEdge(int i, int j) {
+		if (outBounds(i) || outBounds(j))
+			return false;
+
+		if (theGraph[i][j] > 0)
+			return true;
+		if (theGraph[j][i] > 0)
+			return true;
+		return false;
+	}
+
+	public boolean putEdge(int i, int j, int weight) {
+		if (outBounds(i) || outBounds(j))
+			return false;
+
+		theGraph[i][j] = weight;
+		theGraph[j][i] = weight;
+		degree[i]++;
+		degree[j]++;
+		numEdges++;
+		return true;
+	}
+
+	public boolean removeEdge(int i, int j) {
+		if (outBounds(i) || outBounds(j))
+			return false;
+
+		theGraph[i][j] = 0;
+		theGraph[j][i] = 0;
+		degree[i]--;
+		degree[j]--;
+		numEdges--;
+		return true;
+	}
+
+	public int degree(int i) {
+		if (outBounds(i))
+			return -1;
+		return degree[i];
+	}
+
+	public int inDegree(int i) {
+		return -1;
+	}
+
+	public int outDegree(int i) {
+		return -1;
+	}
+
+}
