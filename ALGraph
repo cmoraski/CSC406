@@ -1,4 +1,4 @@
-package asgn01;
+package asgn02;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -6,134 +6,50 @@ import java.util.Scanner;
 public abstract class ALGraph extends Graph{
 
 	protected ALNode[] theGraph;
-	private boolean isDirected;
 
-	public ALGraph(Scanner sc, boolean isWeighted, boolean isDirected){
-		super(sc, isWeighted, isDirected, false);
-		this.isDirected = isDirected;
+	public ALGraph(Scanner sc){
+		super(sc);
+		theGraph = new ALNode[numNodes];
 	}
 
-	public boolean existEdge(Edge e){
-		for (int i = 0; i < allEdges.length; i++){
-			if (allEdges[i] != null && allEdges[i].equals(e))
-				return true;
-		}
-		return false;
-	}
+	public abstract boolean existEdge(int i, int j);
 
-	public void putEdge(Edge e){
-		theGraph[e.getBeginningNode().getNodeNum()] = new ALNode(e.getEndingNode(), e.getWeight(), theGraph[e.getBeginningNode().getNodeNum()]);
-		for (int i = 0; i < allEdges.length; i++){
-			if (allEdges[i] == null)
-				allEdges[i] = e;
-		}
-		outDegree[e.getBeginningNode().getNodeNum()]++;
-		inDegree[e.getEndingNode().getNodeNum()]++;
-	}
+	public abstract boolean putEdge(int i, int j, int weight);
 
-	public void removeEdge(Edge e){
+	public abstract boolean removeEdge(int i, int j);
 
-		ALNode currNode = theGraph[e.getBeginningNode().getNodeNum()];
+	public abstract int degree(int i);
 
-		if (e.getEndingNode().equals(currNode.getNode())){
-			theGraph[e.getBeginningNode().getNodeNum()] = currNode.getNextNode();
-			for (int i = 0; i < allEdges.length; i++){
-				if (allEdges[i] != null && allEdges[i].equals(e)){
-					inDegree[e.getEndingNode().getNodeNum()]--;
-					outDegree[e.getBeginningNode().getNodeNum()]--;
-					allEdges[i] = null;
-					break;
-				}
-			}
-			return;
-		}
+	public abstract int inDegree(int i);
 
-		ALNode prevNode = currNode;
-		currNode = currNode.getNextNode();
+	public abstract int outDegree(int i);
 
-		while (currNode != null){
-			if (e.getEndingNode().equals(currNode.getNode())){
-				prevNode.setNextNode(currNode.getNextNode());
-				for (int i = 0; i < allEdges.length; i++){
-					if (allEdges[i].equals(e)){
-						allEdges[i] = null;
-						break;
-					}
-				}
-				return;
-			}
-			prevNode = currNode;
-			currNode = currNode.getNextNode();
-		}
 
-	}
-
-	public int inDegree(Node n){
-		return inDegree[n.getNodeNum()];
-	}
-
-	public int outDegree(Node n){
-		return outDegree[n.getNodeNum()];
-	}
-
-	public ArrayList<Node> adjacentVertices(Node n){
-		ArrayList<Node> vertices = new ArrayList<Node>();
-		ALNode theNode = theGraph[n.getNodeNum()];
-		while(theNode != null){
-			vertices.add(theNode.getNode());
-			theNode = theNode.getNextNode();
-		}
-		return vertices;
-	}
-
-	public boolean areAdjacent(Node n, Node o){
+	public ArrayList<Node> adjacentVertices(int i) {
+		if (outBounds(i))
+			return null;
 		
-		ALNode theNode = theGraph[n.getNodeNum()];
-		
-		if (!isDirected){
-			while(theNode != null){
-				if (theNode.getNode().equals(o))
-					return true;
-				theNode = theNode.getNextNode();
-			}
-			theNode = theGraph[o.getNodeNum()];
-			while(theNode != null){
-				if (theNode.getNode().equals(n))
-					return true;
-				theNode = theNode.getNextNode();
-			}
+		ArrayList<Node> adjNodes = new ArrayList<Node>();
+		ALNode temp = theGraph[i];
+		while (temp != null){
+			adjNodes.add(temp.getNode());
+			temp = temp.getNextNode();
 		}
-		else{
-			theNode = theGraph[o.getNodeNum()];
-			while(theNode != null){
-				if (theNode.getNode().equals(n))
+		return adjNodes;
+	}
+
+	public boolean areAdjacent(int i, int j) {
+		if (outBounds(i) || outBounds(j))
+			return false;
+
+		ALNode temp = theGraph[i];
+		if (temp != null){
+			while(temp.hasNextNode()){
+				if (temp.getNode().getNodeNum() == j)
 					return true;
-				theNode = theNode.getNextNode();
 			}
 		}
 		return false;
 	}
-
-	public void initializeGraph(){
-		theGraph = new ALNode[allNodes.length];
-	}
-
-	public boolean existEdge(int i, int j) { return false; }
-
-	public void putEdge(int i, int j, int weight) { }
-
-	public void removeEdge(int i, int j) { }
-
-	public int degree(Node n){ return -1; }
-
-	public int degree(int i) { return -1; }
-
-	public int inDegree(int i) { return -1; }
-
-	public int outDegree(int i) { return -1; }
-
-	public ArrayList<Node> adjacentVertices(int i) { return null; }
-
-	public boolean areAdjacent(int i, int j) { return false; }
 }
 
