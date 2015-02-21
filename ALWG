@@ -1,0 +1,100 @@
+package asgn02;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class ALWG extends ALGraph{
+
+	public ALWG(Scanner sc){
+		super(sc);
+		
+		degree = new int[numNodes];
+		
+		String[] theEdges = sc.nextLine().split(" ");
+		
+		for(int i = 0; i < theEdges.length; i+=3){
+			putEdge(new Edge(new Node(Integer.parseInt(theEdges[i])), new Node(Integer.parseInt(theEdges[i+1])), Integer.parseInt(theEdges[i+2])));
+			putEdge(new Edge(new Node(Integer.parseInt(theEdges[i+1])), new Node (Integer.parseInt(theEdges[i])), Integer.parseInt(theEdges[i+2])));
+		}
+	}
+
+	public boolean existEdge(int i, int j) {
+		if (outBounds(i) || outBounds(j))
+			return false;
+
+		ALNode temp = theGraph[i];
+		while(temp != null){
+			if (temp.getNode().equals(new Node(j)))
+				return true;
+			temp = temp.getNextNode();
+		}
+		temp = theGraph[j];
+		while(temp != null){
+			if (temp.getNode().equals(new Node(i)))
+				return true;
+			temp = temp.getNextNode();
+		}
+		return false;
+	}
+
+	public boolean putEdge(int i, int j, int weight) {
+		ALNode newNode1 = new ALNode (new Node(j), weight, theGraph[i]);
+		ALNode newNode2 = new ALNode (new Node(i), weight, theGraph[j]);
+		newNode1.setNextNode(theGraph[i]);
+		theGraph[i] = newNode1;
+		newNode2.setNextNode(theGraph[j]);
+		theGraph[j] = newNode2;
+		degree[i]++;
+		degree[j]++;
+		numEdges++;
+		return true;
+	}
+
+	public boolean removeEdge(int i, int j) {
+		if (outBounds(i) || outBounds(j))
+			return false;
+
+		ALNode prev = theGraph[i], temp = theGraph[i];
+		while(temp != null){
+			if (temp.getNode().equals(new Node(j))){
+				prev.setNextNode(temp.getNextNode());
+				degree[i]--;
+				degree[j]--;
+				numEdges--;
+			}
+			else{
+				prev = temp;
+				temp = temp.getNextNode();
+			}
+		}
+		prev = theGraph[j];
+		temp = theGraph[j];
+		
+		while(temp != null){
+			if (temp.getNode().equals(new Node(i))){
+				prev.setNextNode(temp.getNextNode());
+				return true;
+			}
+			else{
+				prev = temp;
+				temp = temp.getNextNode();
+			}
+		}
+		return false;
+	}
+
+	public int degree(int i) {
+		if (outBounds(i))
+			return -1;
+		return degree[i];
+	}
+
+	public int inDegree(int i) {
+		return -1;
+	}
+
+	public int outDegree(int i) {
+		return -1;
+	}
+
+}
