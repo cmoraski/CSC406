@@ -1,4 +1,4 @@
-package asgn01;
+package asgn02;
 
 public class ALNode {
 	
@@ -26,5 +26,16 @@ public class ALNode {
 	
 	public void setNextNode(ALNode node){
 		this.nextNode = node;
+	}
+	
+	public boolean hasNextNode(){
+		if (nextNode != null)
+			return true;
+		return false;
+	}
+	public boolean equals(ALNode otherNode){
+		if (this.theNode.equals(otherNode.theNode) && this.weight == otherNode.weight)
+			return true;
+		return false;
 	}
 }
