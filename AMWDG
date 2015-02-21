@@ -1,13 +1,68 @@
-package asgn01;
+package asgn02;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 //Adjacency Matrix Weighted Directed Graph
 public class AMWDG extends AMGraph{
-	
+
 	public AMWDG(Scanner sc){
-		super(sc, true, true);
+		super(sc);
+
+		inDegree = new int[numNodes];
+		outDegree = new int[numNodes];
+
+		String[] theEdges = sc.nextLine().split(" ");
+
+		for(int i = 0; i < theEdges.length; i+=3){
+			putEdge(Integer.parseInt(theEdges[i]), Integer.parseInt(theEdges[i+1]), Integer.parseInt(theEdges[i+2]));
+		}
 	}
-	
+
+	public boolean existEdge(int i, int j) {
+		if (outBounds(i) || outBounds(j))
+			return false;
+
+		if (theGraph[i][j] > 0)
+			return true;
+		return false;
+	}
+
+	public boolean putEdge(int i, int j, int weight) {
+		if (outBounds(i) || outBounds(j))
+			return false;
+
+		theGraph[i][j] = weight;
+		outDegree[i]++;
+		inDegree[j]++;
+		numEdges++;
+		return true;
+	}
+
+	public boolean removeEdge(int i, int j) {
+		if (outBounds(i) || outBounds(j))
+			return false;
+
+		theGraph[i][j] = 0;
+		outDegree[i]--;
+		inDegree[j]--;
+		numEdges--;
+		return true;
+	}
+
+	public int degree(int i) {
+		return -1;
+	}
+
+	public int inDegree(int i) {
+		if (outBounds(i))
+			return -1;
+		return inDegree[i];
+	}
+
+	public int outDegree(int i) {
+		if (outBounds(i))
+			return -1;
+		return outDegree[i];
+	}
 }
