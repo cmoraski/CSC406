@@ -1,0 +1,43 @@
+package asgn02;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
+public class Kruskal {
+
+	private PriorityQueue<Edge> myEdges;
+	private UnionFind uf;
+	
+	public Kruskal(Graph g){
+		
+		myEdges = new PriorityQueue<Edge>(1, new EdgeComparator());
+		uf = new UnionFind(g.numNodes());
+		Edge[] e = g.getAllEdges();
+		for (int j = 0; j < e.length; j++){
+			myEdges.offer(e[j]);
+		}
+		//doYourStuff(g.numNodes());
+		
+	}
+	
+	public ArrayList<Edge> doYourStuff(int n){
+		//Graph g = new AMWG(n);
+		ArrayList<Edge> g = new ArrayList<Edge>();
+		
+		Edge checkEdge = null;
+		
+		while(g.size() < n - 1){ //g.numNodes() < n - 1){
+			checkEdge = myEdges.poll();
+			int begN = checkEdge.getBeginningNode().getNodeNum();
+			int endN = checkEdge.getEndingNode().getNodeNum();
+			if (uf.find(begN) != uf.find(endN)){
+				//g.putEdge(checkEdge);
+				g.add(checkEdge);
+				uf.union(begN, endN);
+			}
+		}
+		return g;
+	}
+	
+}
