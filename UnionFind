@@ -1,0 +1,54 @@
+package asgn02;
+
+import java.util.Stack;
+
+public class UnionFind {
+
+	private int [] theSet;
+	
+	public UnionFind(int size){
+		theSet = new int[size];
+		for (int i = 0; i < theSet.length; i++){
+			theSet[i] = -1;
+		}
+	}
+	
+	public void makeSet(int x){
+		theSet[x] = -1;
+	}
+	
+	public int find(int x){
+		Stack<Integer> s = new Stack<Integer>();
+		while (theSet[x] >= 0){
+			s.push(x);
+			x = theSet[x];
+		}
+		while(!s.isEmpty()){
+			theSet[s.pop()] = x;
+		}
+		return x;
+	}
+	
+	public void union(int x, int y){
+		while(theSet[x] >= 0)
+			x = theSet[x];
+		while(theSet[y] >= 0)
+			y = theSet[y];
+		//If they are part of the same set already, do nothing
+		if (y == x)
+			return;
+		/*
+		 * Add the number of elements to set x
+		 * set y's root to x
+		 */
+		if (theSet[x] < theSet[y]){
+			theSet[x] += theSet[y];
+			theSet[y] = x;
+		}
+		else{
+			theSet[y] += theSet[x];
+			theSet[x] = y;
+		}
+	}
+	
+}
