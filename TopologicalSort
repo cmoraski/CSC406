@@ -1,0 +1,50 @@
+package asgn02;
+
+import java.util.ArrayList;
+import java.util.Stack;
+
+public class TopologicalSort {
+
+	private Stack<Node> s;
+	private Node[] topoSort;
+	
+	public TopologicalSort(Graph g){
+
+		s = new Stack<Node>();
+		
+		for (int i = 0; i < g.numNodes(); i++){
+			if (g.inDegree(i) == 0)
+				s.push(new Node(i));
+		}
+		
+		topoSort = doTopologicalSort(g);
+	}
+	
+	public Node[] getTopoSort(){
+		return topoSort;
+	}
+	
+	public Node[] doTopologicalSort(Graph g){
+		Node n = null;
+		Node[] ts = new Node[g.numNodes()];
+		int i = 1;
+		while(!s.isEmpty()){
+			n = s.pop();
+			ts[i-1] = n;
+			i++;
+			ArrayList<Node> adjN = g.adjacentVertices(n);
+			for (int j = 0; j < adjN.size(); j++){
+				Node cn = adjN.get(j);
+				g.decrementInDegree(cn);
+				if (g.inDegree(cn) == 0)
+					s.push(cn);
+			}
+		}
+		
+		if (i > g.numNodes())
+			return ts; //output
+	
+		return null; //G is cyclic
+	}
+
+}
