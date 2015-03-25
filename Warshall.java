@@ -24,6 +24,17 @@ public class Warshall {
 		}
 	}
 	
+	public void printWarshalls(){
+		for (int i = 0; i < r.length; i++){
+			for (int j = 0; j < r[0].length; j++){
+				if (j == r[0].length - 1)
+					System.out.println(r[i][j]);
+				else
+					System.out.print(r[i][j] + "\t");
+			}
+		}
+	}
+	
 	public int[][] getWarshalls(){
 		return r;
 	}
