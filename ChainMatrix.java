@@ -31,4 +31,14 @@ public class ChainMatrix {
 	public int[][] getChainMatrix(){
 		return cost;
 	}
+	public void printChainMatrix(){
+		for (int i = 0; i < cost.length; i++){
+			for (int j = 0; j < cost[0].length; j++){
+				if (j == cost[0].length - 1)
+					System.out.println(cost[i][j]);
+				else
+					System.out.print(cost[i][j] + "\t");
+			}
+		}
+	}
 }
