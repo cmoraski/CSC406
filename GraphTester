@@ -1,96 +1,203 @@
-package asgn01;
+package asgn03;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Scanner;
-
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /*
  * Name: Corey Moraski
  * Course: CSC 406 Algorithms & Data Structures
  * Semester: Spring 2015
- * Assignment #1
- * Assigned: January 26th, 2015
- * Due: On or before February 12th, 2015
+ * Assignment #3
+ * Assigned: February 12th, 2015
+ * Due: On or before March 4th, 2015
  */
 public class GraphTester {
 
-	public static void main(String[]args){
-		Scanner sc = null;//= new Scanner(System.in);
-		//System.out.print("Please give the file path: ");
+	public static void TestThis()
+	{
+		//ChainMatrix cm = new ChainMatrix(new int[][] a {0})
+
+		PrintStream outputStream = null;
+
+		String fileName = "";
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Please give the file path: ");
 		try {
-			sc = new Scanner (new File ("assign1Test.txt"));//sc.next()));
+			File f = new File(sc.next());
+			fileName = f.getName().substring(0, f.getName().length() - 4);
+			sc = new Scanner(f);
+		} catch (FileNotFoundException e) {
+			System.out
+			.println("Im sorry, but I could not find the file "
+					+ fileName
+					+ ".  Please re-run the program and try again.\n\nThank you for using a CMoProduct (Again, Corey is crazy).");
+		}
+		try {
+			outputStream = new PrintStream(new FileOutputStream(fileName + "_Output.txt"));
+			System.setOut(outputStream);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+
 		String graphType = sc.nextLine();
-		Graph thisGraph = null;
-		if (graphType.equals("ALWDG")){
-			thisGraph = new ALWDG(sc);
-		}
-		else if (graphType.equals("AMWDG")){
-			thisGraph = new AMWDG(sc);
-		}
-		else if (graphType.equals("ALDG")){
-			thisGraph = new ALDG(sc);
-		}
-		else if (graphType.equals("AMDG")){
-			thisGraph = new AMDG(sc);
-		}
-	
- 		System.out.println("Node 0 has an out degree of: " + thisGraph.outDegree(0));
-		System.out.println("Node 1 has an out degree of: " + thisGraph.outDegree(1));
-		System.out.println("Node 2 has an out degree of: " + thisGraph.outDegree(2));
-		System.out.println("Node 3 has an out degree of: " + thisGraph.outDegree(3));
-		System.out.println("Node 4 has an out degree of: " + thisGraph.outDegree(4));
-		
-		
-		System.out.println("Node 0 has an in degree of: " + thisGraph.inDegree(0));
-		System.out.println("Node 1 has an in degree of: " + thisGraph.inDegree(1));
-		System.out.println("Node 2 has an in degree of: " + thisGraph.inDegree(2));
-		System.out.println("Node 3 has an in degree of: " + thisGraph.inDegree(3));
-		System.out.println("Node 4 has an in degree of: " + thisGraph.inDegree(4));
+		Graph wGraph = null;
+		Graph dGraph = null;
+		Graph wdGraph = null;
 
-		System.out.println("The Graph contains and edge from Node 3 to Node 4: " + thisGraph.existEdge(3,4));
-		thisGraph.removeEdge(3,4);
-		System.out.println("The Graph contains and edge from Node 3 to Node 4: " + thisGraph.existEdge(3,4));
-		thisGraph.putEdge(3,4,4);
-		System.out.println("The Graph contains and edge from Node 3 to Node 4: " + thisGraph.existEdge(3,4));
+		String type = "";
 
-		System.out.println("Nodes adjacent to Node 1 are: " + thisGraph.adjacentVertices(1).toString());
-		thisGraph.removeEdge(1,4);
-		System.out.println("Nodes adjacent to Node 1 are: " + thisGraph.adjacentVertices(1).toString());
+		if (graphType.equals("ALDG")) {
+			dGraph = new ALDG(sc);
+			// TOPO#1
+			System.out.println("TOPO ALDG");
+			TopologicalSort ts = new TopologicalSort(dGraph);
 
+			Node[] na = ts.getTopoSort();
 
-/*		System.out.println("Node 0 has an out degree of: " + thisGraph.outDegree(new Node(0)));
-		System.out.println("Node 1 has an out degree of: " + thisGraph.outDegree(new Node(1)));
-		System.out.println("Node 2 has an out degree of: " + thisGraph.outDegree(new Node(2)));
-		System.out.println("Node 3 has an out degree of: " + thisGraph.outDegree(new Node(3)));
-		System.out.println("Node 4 has an out degree of: " + thisGraph.outDegree(new Node(4)));
-		
-		
-		System.out.println("Node 0 has an in degree of: " + thisGraph.inDegree(new Node(0)));
-		System.out.println("Node 1 has an in degree of: " + thisGraph.inDegree(new Node(1)));
-		System.out.println("Node 2 has an in degree of: " + thisGraph.inDegree(new Node(2)));
-		System.out.println("Node 3 has an in degree of: " + thisGraph.inDegree(new Node(3)));
-		System.out.println("Node 4 has an in degree of: " + thisGraph.inDegree(new Node(4)));
-		
-		System.out.println("The Graph contains and edge from Node 3 to Node 4: " + thisGraph.existEdge(new Edge(new Node(3), new Node(4),4)));
-		thisGraph.removeEdge(new Edge(new Node(3), new Node(4), 4));
-		System.out.println("The Graph contains and edge from Node 3 to Node 4: " + thisGraph.existEdge(new Edge(new Node(3), new Node(4),4)));
-		thisGraph.putEdge(new Edge(new Node(3), new Node(4), 4));
-		System.out.println("The Graph contains and edge from Node 3 to Node 4: " + thisGraph.existEdge(new Edge(new Node(3), new Node(4),4)));
-		
-		System.out.println("Nodes adjacent to Node 1 are: " + thisGraph.adjacentVertices(new Node(1)).toString());
-		thisGraph.removeEdge(new Edge(new Node(1),new Node(4), 4));
-		System.out.println("Nodes adjacent to Node 1 are: " + thisGraph.adjacentVertices(new Node(1)).toString());
-		
-		System.out.println("Are Nodes 1 and 2 adjacent? " + thisGraph.areAdjacent(new Node(1), new Node(2)));
-		System.out.println("Are Nodes 2 and 1 adjacent? " + thisGraph.areAdjacent(new Node(2), new Node(1)));*/
+			for (int i = 0; i < na.length; i++) {
+				if (i == na.length - 1)
+					System.out.print(na[i].toString());
+				else
+					System.out.print(na[i].toString() + " ---> ");
+			}
+			System.out.println();
+
+		} else if (graphType.equals("AMDG")) {
+			dGraph = new AMDG(sc);
+			// TOPO#2
+			System.out.println("TOPO AMDG");
+			TopologicalSort ts = new TopologicalSort(dGraph);
+
+			Node[] na = ts.getTopoSort();
+
+			for (int i = 0; i < na.length; i++) {
+				if (i == na.length - 1)
+					System.out.print(na[i].toString());
+				else
+					System.out.print(na[i].toString() + " ---> ");
+			}
+			System.out.println();
+
+		} else if (graphType.equals("ALWG")) {
+			wGraph = new ALWG(sc);
+			// KRUSKAL#3
+			System.out.println("Kruskal ALWG");
+			Kruskal k = new Kruskal(wGraph);
+
+			ArrayList<Edge> mst = k.doYourStuff(wGraph.numNodes());
+
+			System.out.println("Your MST: ");
+			for (int i = 0; i < mst.size(); i++)
+				System.out.println(mst.get(i).toString());
+
+			System.out.println();
+		} else if (graphType.equals("AMWDG")) {
+			wdGraph = new AMWDG(sc);
+			// DO NOTHING
+			System.out.println();
+		} else if (graphType.equals("ALWDG")) {
+			wdGraph = new ALWDG(sc);
+			// DO NOTHING
+		}
+
+		// END OUTPUT		
+		System.out.println();
+		System.out
+		.println("Thank You for choosing CMoProductions (I'm keeping this to display because Corey is crazy).");
 	}
+	public static void main(String[] args) {
+
+		/*
+		 * Assignment 2 testing
+		 */
+		//		System.out.println("Type file name of desired graph, then enter.  You can continue typing file names until complete.");
+		//		Scanner sc = new Scanner(System.in);
+		//		String cont = sc.nextLine();
+		//		while (cont.equals("Y") || cont.equals("y"))
+		//		{
+		//			TestThis();
+		//
+		//		}
+
+
+		/*
+		 * Floyds Testing
+		 * 
+		 */
+//		int[][] fl = new int[][]{{0,5,0,2,0},{0,0,2,0,0},{3,0,0,0,7},{0,0,4,0,1},{1,3,0,0,0}};
+//		int[][] fl2 = new int[][]{{0,0,3,0},{2,0,0,0},{0,7,0,1},{6,0,0,0}};
+//		Floyd f = new Floyd(fl2);
+//
+//		f.printFloyds();
+//		
+//		System.out.println(f.getPath(0,1));
+//		System.out.println(f.getPath(0,0));
+
+		/*
+		 * Warshalls Testing
+		 * 
+		 * WORKING
+		 */
+		//		int[][] wa = new int[][]{{0,1,0,0},{0,0,0,1},{0,0,0,0},{1,0,1,0}};
+		//		Warshall w = new Warshall(wa);
+		//		
+		//		int[][] thisW = w.getWarshalls();
+		//		
+		//		for (int i = 0; i < thisW.length; i++){
+		//			for (int j = 0; j < thisW.length; j++){
+		//				if (j == thisW.length - 1)
+		//					System.out.println(thisW[i][j]);
+		//				else
+		//					System.out.print(thisW[i][j] + "\t");
+		//			}
+		//		}
+
+
+		/*
+		 * Knapsack Testing
+		 * 
+		 * WORKING
+		 */
+//		Knapsack ks = new Knapsack(new int[] {0,12,10,20,15}, new int[] {0,2,1,3,2}, 4, 5);
+//		//Knapsack ks1 = new Knapsack(new int[] {)
+//
+//		int [][] k = ks.getKnapsack();
+//		for (int i = 0; i < k.length; i++){
+//			for (int j = 0; j < k[0].length; j++){
+//				if (j == k[0].length - 1)
+//					System.out.println(k[i][j]);
+//				else
+//					System.out.print(k[i][j] + "\t");
+//			}
+//		}
+
+		/*
+		 * This is Testing for chain matrix
+		 * 
+		 * WORKING
+		 */
+//				Scanner sc = null;
+//				
+//				try {
+//					sc = new Scanner(new File("chainMatrix.txt"));
+//				} catch (FileNotFoundException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				String dimensions = sc.nextLine();
+//				String [] d = dimensions.split(" ");
+//				int [] dim = new int[d.length];
+//				for (int i = 0; i < dim.length; i++){
+//					dim[i] = Integer.parseInt(d[i]);
+//				}
+//				ChainMatrix cm = new ChainMatrix(dim);
+//				cm.printChainMatrix();
+
+	}
+
+
 }
