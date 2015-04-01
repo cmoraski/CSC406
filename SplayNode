@@ -1,0 +1,57 @@
+package asgn04;
+
+public class SplayNode<T extends Comparable <T>> {
+
+	private SplayNode<T> parent, rightChild, leftChild;
+	private T data;
+	
+	public SplayNode(){
+		parent = null;
+		rightChild = null;
+		leftChild = null;
+		data = null;
+	}
+	public SplayNode(T d){
+		data = d;
+		parent = null;
+		rightChild = null;
+		leftChild = null;
+	}
+	public SplayNode(SplayNode<T> p, SplayNode<T> rc,
+			SplayNode<T> lc, T d){
+		parent = p;
+		data = d;
+		rightChild = rc;
+		leftChild = lc;
+	}
+	public void setRightChild (SplayNode<T> rc){
+		rightChild = rc;
+	}
+	public void setLeftChild (SplayNode<T> lc){
+		leftChild = lc;
+	}
+	public void setParent (SplayNode<T> p){
+		parent = p;
+	}
+	public void setData (T d){
+		data = d;
+	}
+	public SplayNode<T> getRightChild (){
+		return rightChild;
+	}
+	public SplayNode<T> getLeftChild (){
+		return leftChild;
+	}
+	public SplayNode<T> getParent (){
+		return parent;
+	}
+	public T getData (){
+		return data;
+	}
+	public boolean equals(SplayNode<T> otherNode){
+		if (this.data.compareTo(otherNode.data) == 0)
+			return true;
+		return false;
+	}
+	
+}
