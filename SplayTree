@@ -1,0 +1,254 @@
+package asgn04;
+
+public class SplayTree {
+
+	private SplayNode root;
+	private int count;
+
+	public SplayTree(SplayNode r){
+		root = r;
+	}
+	public SplayTree(){
+		root = null;
+	}
+	public boolean isEmpty(){
+		return (root == null);
+	}
+	public void clear(){
+		root = null;
+	}
+	public void insert(SplayNode ele)
+	{
+		SplayNode z = root;
+		SplayNode p = null;
+		while (z != null)
+		{
+			p = z;
+			if (ele.getData().compareTo(p.getData()) < 0) //Have to compare the data elements... How?
+				z = z.getRightChild();
+			else
+				z = z.getLeftChild();
+		}
+		z = ele;
+		if (p == null)
+			root = z;
+		else if (ele.getData().compareTo(p.getData()) < 0) //Have to compare the data elements... How?
+			p.setRightChild(z);
+		else
+			p.setLeftChild(z);
+		Splay(z);
+		count++;
+	}
+
+
+
+
+
+
+
+	/** rotate **/
+	public void makeLeftChildParent(SplayNode c, SplayNode p)
+	{
+		if ((c == null) || (p == null) || (p.getLeftChild() != c) || (c.getParent() != p))
+			throw new RuntimeException("WRONG");
+
+		if (p.getParent() != null)
+		{
+			if (p.equals(p.getParent().getLeftChild()))
+				p.getParent().setLeftChild(c);
+			else 
+				p.getParent().setRightChild(c);
+		}
+		if (c.getRightChild() != null)
+			c.getRightChild().setParent(p);
+
+		c.setParent(p.getParent());
+		p.setParent(c);
+		p.setLeftChild(c.getRightChild());
+		c.setRightChild(p);
+	}
+
+	/** rotate **/
+	public void makeRightChildParent(SplayNode c, SplayNode p)
+	{
+		if ((c == null) || (p == null) || (p.getRightChild() != c) || (c.getParent() != p))
+			throw new RuntimeException("WRONG");
+		if (p.getParent() != null)
+		{
+			if (p.equals(p.getParent().getLeftChild()))
+				p.getParent().setLeftChild(c);
+			else
+				p.getParent().setRightChild(c);
+		}
+		if (c.getLeftChild() != null)
+			c.getLeftChild().setParent(p);
+		c.setParent(p.getParent());
+		p.setParent(p);
+		p.setRightChild(c.getLeftChild());
+		c.setLeftChild(p);
+	}
+
+	/** function splay **/
+	private void Splay(SplayNode x)
+	{
+		while (x.getParent() != null)
+		{
+			SplayNode Parent = x.getParent();
+			SplayNode GrandParent = Parent.getParent();
+			if (GrandParent == null)
+			{
+				if (x.equals(Parent.getLeftChild()))
+					makeLeftChildParent(x, Parent);
+				else
+					makeRightChildParent(x, Parent);                 
+			} 
+			else
+			{
+				if (x.equals(Parent.getLeftChild()))
+				{
+					if (Parent == GrandParent.getLeftChild())
+					{
+						makeLeftChildParent(Parent, GrandParent);
+						makeLeftChildParent(x, Parent);
+					}
+					else 
+					{
+						makeLeftChildParent(x, x.getParent());
+						makeRightChildParent(x, x.getParent());
+					}
+				}
+				else 
+				{
+					if (Parent == GrandParent.getLeftChild())
+					{
+						makeRightChildParent(x, x.getParent());
+						makeLeftChildParent(x, x.getParent());
+					} 
+					else 
+					{
+						makeRightChildParent(Parent, GrandParent);
+						makeRightChildParent(x, Parent);
+					}
+				}
+			}
+		}
+		root = x;
+	}
+
+	/** function to remove element **/
+	public void remove(int ele)
+	{
+		SplayNode node = findNode(ele);
+		remove(node);
+	}
+
+	/** function to remove node **/
+	private void remove(SplayNode node)
+	{
+		if (node == null)
+			return;
+
+		Splay(node);
+		if( (node.getLeftChild() != null) && (node.getRightChild() !=null))
+		{ 
+			SplayNode min = node.getLeftChild();
+			while(min.getRightChild()!=null)
+				min = min.getRightChild();
+
+			min.setRightChild(node.getRightChild());
+			node.getRightChild().setParent(min);
+			node.getLeftChild().setParent(null);
+			root = node.getLeftChild();
+		}
+		else if (node.getRightChild() != null)
+		{
+			node.getRightChild().setParent(null);
+			root = node.getRightChild();
+		} 
+		else if( node.getLeftChild() !=null)
+		{
+			node.getLeftChild().setParent(null);
+			root = node.getLeftChild();
+		}
+		else
+		{
+			root = null;
+		}
+		node.setParent(null);
+		node.setLeftChild(null);
+		node.setRightChild(null);
+		node = null;
+		count--;
+	}
+
+	/** Functions to count number of nodes **/
+	public int countNodes()
+	{
+		return count;
+	}
+
+	/** Functions to search for an element **/
+	public boolean search(Comparable val)
+	{
+		return findNode(val) != null;
+	}
+	private SplayNode findNode(Comparable ele)
+	{
+		SplayNode z = root;
+		while (z != null)
+		{
+			if (ele.compareTo(z.getData()) > 0) //Don't know if this should be > 0 or < 0, so if error occurs, swap 
+				z = z.getRightChild();
+			else if (ele.compareTo(z.getData()) < 0) //Don't know if this should be > 0 or < 0, so if error occurs, swap 
+				z = z.getLeftChild();
+			else
+				return z;
+		}
+		return null;
+	}
+
+	/** Function for inorder traversal **/ 
+	public void inorder()
+	{
+		inorder(root);
+	}
+	private void inorder(SplayNode r)
+	{
+		if (r != null)
+		{
+			inorder(r.getLeftChild());
+			System.out.print(r.getData() +" ");
+			inorder(r.getRightChild());
+		}
+	}
+
+	/** Function for preorder traversal **/
+	public void preorder()
+	{
+		preorder(root);
+	}
+	private void preorder(SplayNode r)
+	{
+		if (r != null)
+		{
+			System.out.print(r.getData() +" ");
+			preorder(r.getLeftChild());             
+			preorder(r.getRightChild());
+		}
+	}
+
+	/** Function for postorder traversal **/
+	public void postorder()
+	{
+		postorder(root);
+	}
+	private void postorder(SplayNode r)
+	{
+		if (r != null)
+		{
+			postorder(r.getLeftChild());             
+			postorder(r.getRightChild());
+			System.out.print(r.getData() +" ");
+		}
+	}     
+}
