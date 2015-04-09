@@ -49,6 +49,8 @@ public class SplayNode<T extends Comparable <T>> {
 		return data;
 	}
 	public boolean equals(SplayNode<T> otherNode){
+		if (otherNode == null)
+			return false;
 		if (this.data.compareTo(otherNode.data) == 0)
 			return true;
 		return false;
