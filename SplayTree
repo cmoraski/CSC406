@@ -136,8 +136,43 @@ public class SplayTree {
 			}
 		}
 		root = x;
-	}
 
+	}
+	
+	/** function to get size of node **/
+	public int getSize(SplayNode r){
+		if (r == null)
+			return 0;
+		return (getSize(r.getLeftChild()) + getSize(r.getRightChild()) + 1);
+	}
+	
+	/** function to get the rank of node **/
+	public int getRank(SplayNode r){
+		return (int)Math.log10((double)getSize(r));
+	}
+	
+	/** function to remove minimum element **/
+	public void removeMin(){
+		SplayNode temp = root;
+		SplayNode min = null;
+		while (temp != null){
+			min = temp;
+			temp = temp.getLeftChild();
+		}
+		remove(min);
+	}
+	
+	/** function to remove maximum element **/
+	public void removeMax(){
+		SplayNode temp = root;
+		SplayNode max = null;
+		while (temp != null){
+			max = temp;
+			temp = temp.getRightChild();
+		}
+		remove(max);
+	}
+	
 	/** function to remove element **/
 	public void remove(Comparable ele)
 	{
