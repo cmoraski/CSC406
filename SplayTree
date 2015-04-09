@@ -24,27 +24,30 @@ public class SplayTree {
 		while (z != null)
 		{
 			p = z;
-			if (ele.getData().compareTo(p.getData()) < 0) //Have to compare the data elements... How?
+			if (ele.getData().compareTo(p.getData()) > 0)
 				z = z.getRightChild();
-			else
+			else if (ele.getData().compareTo(p.getData()) < 0)
 				z = z.getLeftChild();
+			else{
+				System.out.println("The node you are trying to insert alredy exists!");
+				splay(z);
+				return;
+			}
 		}
 		z = ele;
 		if (p == null)
 			root = z;
-		else if (ele.getData().compareTo(p.getData()) < 0) //Have to compare the data elements... How?
+		else if (ele.getData().compareTo(p.getData()) > 0){
 			p.setRightChild(z);
-		else
+		}
+		else{
 			p.setLeftChild(z);
-		Splay(z);
+		}
+		z.setParent(p);
+
+		splay(z);
 		count++;
 	}
-
-
-
-
-
-
 
 	/** rotate **/
 	public void makeLeftChildParent(SplayNode c, SplayNode p)
@@ -83,13 +86,13 @@ public class SplayTree {
 		if (c.getLeftChild() != null)
 			c.getLeftChild().setParent(p);
 		c.setParent(p.getParent());
-		p.setParent(p);
+		p.setParent(c);
 		p.setRightChild(c.getLeftChild());
 		c.setLeftChild(p);
 	}
 
-	/** function splay **/
-	private void Splay(SplayNode x)
+	/** splay function **/
+	private void splay(SplayNode x)
 	{
 		while (x.getParent() != null)
 		{
@@ -106,7 +109,7 @@ public class SplayTree {
 			{
 				if (x.equals(Parent.getLeftChild()))
 				{
-					if (Parent == GrandParent.getLeftChild())
+					if (Parent.equals(GrandParent.getLeftChild()))
 					{
 						makeLeftChildParent(Parent, GrandParent);
 						makeLeftChildParent(x, Parent);
@@ -119,7 +122,7 @@ public class SplayTree {
 				}
 				else 
 				{
-					if (Parent == GrandParent.getLeftChild())
+					if (Parent.equals(GrandParent.getLeftChild()))
 					{
 						makeRightChildParent(x, x.getParent());
 						makeLeftChildParent(x, x.getParent());
@@ -136,7 +139,7 @@ public class SplayTree {
 	}
 
 	/** function to remove element **/
-	public void remove(int ele)
+	public void remove(Comparable ele)
 	{
 		SplayNode node = findNode(ele);
 		remove(node);
@@ -148,7 +151,7 @@ public class SplayTree {
 		if (node == null)
 			return;
 
-		Splay(node);
+		splay(node);
 		if( (node.getLeftChild() != null) && (node.getRightChild() !=null))
 		{ 
 			SplayNode min = node.getLeftChild();
@@ -197,12 +200,14 @@ public class SplayTree {
 		SplayNode z = root;
 		while (z != null)
 		{
-			if (ele.compareTo(z.getData()) > 0) //Don't know if this should be > 0 or < 0, so if error occurs, swap 
+			if (ele.compareTo(z.getData()) > 0)  
 				z = z.getRightChild();
-			else if (ele.compareTo(z.getData()) < 0) //Don't know if this should be > 0 or < 0, so if error occurs, swap 
+			else if (ele.compareTo(z.getData()) < 0) 
 				z = z.getLeftChild();
-			else
+			else{
+				splay(z);
 				return z;
+			}
 		}
 		return null;
 	}
