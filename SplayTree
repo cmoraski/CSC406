@@ -1,15 +1,20 @@
 package asgn04;
 
+import java.util.Stack;
+
 public class SplayTree {
 
+	private Stack<RankAndSize> allRanksAndSizes;
 	private SplayNode root;
 	private int count;
 
 	public SplayTree(SplayNode r){
 		root = r;
+		allRanksAndSizes = new Stack<RankAndSize>();
 	}
 	public SplayTree(){
 		root = null;
+		allRanksAndSizes = new Stack<RankAndSize>();
 	}
 	public boolean isEmpty(){
 		return (root == null);
@@ -94,8 +99,16 @@ public class SplayTree {
 	/** splay function **/
 	private void splay(SplayNode x)
 	{
+		//Add in output for n(x), n'(x), r(x), r'(x)
+		//output these after each splay substep...
+		//You can use a collection and output at the
+		//end using an iterator.
+		
 		while (x.getParent() != null)
 		{
+			//Adding my initial size and rank prior to my splay operation
+			allRanksAndSizes.push(new RankAndSize(getSize(x), getRank(x)));
+			
 			SplayNode Parent = x.getParent();
 			SplayNode GrandParent = Parent.getParent();
 			if (GrandParent == null)
@@ -134,6 +147,12 @@ public class SplayTree {
 					}
 				}
 			}
+			//placing size and rank values in the RankAndSize
+			//object created prior
+			RankAndSize currRAS = allRanksAndSizes.pop();
+			currRAS.setNPX(getSize(x));
+			currRAS.setRPX(getRank(x));
+			allRanksAndSizes.push(currRAS);
 		}
 		root = x;
 
@@ -146,7 +165,7 @@ public class SplayTree {
 		return (getSize(r.getLeftChild()) + getSize(r.getRightChild()) + 1);
 	}
 	
-	/** function to get the rank of node **/
+	/** function to get the rank of node using a node **/
 	public int getRank(SplayNode r){
 		return (int)Math.log10((double)getSize(r));
 	}
@@ -245,6 +264,11 @@ public class SplayTree {
 			}
 		}
 		return null;
+	}
+	
+	/** function to retrieve the ranks and sizes **/
+	public Stack<RankAndSize> getAllRanksAndSizes(){
+		return allRanksAndSizes;
 	}
 
 	/** Function for inorder traversal **/ 
