@@ -107,7 +107,7 @@ public class SplayTree {
 		while (x.getParent() != null)
 		{
 			//Adding my initial size and rank prior to my splay operation
-			allRanksAndSizes.push(new RankAndSize(getSize(x), getRank(x)));
+			RankAndSize newRAS = new RankAndSize(getSize(x), getRank(x));
 			
 			SplayNode Parent = x.getParent();
 			SplayNode GrandParent = Parent.getParent();
@@ -149,10 +149,9 @@ public class SplayTree {
 			}
 			//placing size and rank values in the RankAndSize
 			//object created prior
-			RankAndSize currRAS = allRanksAndSizes.pop();
-			currRAS.setNPX(getSize(x));
-			currRAS.setRPX(getRank(x));
-			allRanksAndSizes.push(currRAS);
+			newRAS.setNPX(getSize(x));
+			newRAS.setRPX(getRank(x));
+			allRanksAndSizes.push(newRAS);
 		}
 		root = x;
 
