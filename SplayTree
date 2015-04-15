@@ -1,20 +1,26 @@
 package asgn04;
 
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.Collection;
+
 
 public class SplayTree {
 
-	private Stack<RankAndSize> allRanksAndSizes;
+	private ArrayList<RankAndSize> allRanksAndSizes;
 	private SplayNode root;
 	private int count;
 
 	public SplayTree(SplayNode r){
 		root = r;
-		allRanksAndSizes = new Stack<RankAndSize>();
+		allRanksAndSizes = new ArrayList<RankAndSize>();
+	}
+	public SplayTree(Comparable r){
+		root = new SplayNode(r);
+		allRanksAndSizes = new ArrayList<RankAndSize>();
 	}
 	public SplayTree(){
 		root = null;
-		allRanksAndSizes = new Stack<RankAndSize>();
+		allRanksAndSizes = new ArrayList<RankAndSize>();
 	}
 	public boolean isEmpty(){
 		return (root == null);
@@ -22,27 +28,27 @@ public class SplayTree {
 	public void clear(){
 		root = null;
 	}
-	public void insert(SplayNode ele)
+	public void insert(Comparable ele)
 	{
 		SplayNode z = root;
 		SplayNode p = null;
 		while (z != null)
 		{
 			p = z;
-			if (ele.getData().compareTo(p.getData()) > 0)
+			if (ele.compareTo(p.getData()) > 0)
 				z = z.getRightChild();
-			else if (ele.getData().compareTo(p.getData()) < 0)
+			else if (ele.compareTo(p.getData()) < 0)
 				z = z.getLeftChild();
 			else{
-				System.out.println("The node you are trying to insert alredy exists!");
+				System.out.println("The node you are trying to insert already exists!");
 				splay(z);
 				return;
 			}
 		}
-		z = ele;
+		z = new SplayNode(ele);
 		if (p == null)
 			root = z;
-		else if (ele.getData().compareTo(p.getData()) > 0){
+		else if (ele.compareTo(p.getData()) > 0){
 			p.setRightChild(z);
 		}
 		else{
@@ -99,15 +105,11 @@ public class SplayTree {
 	/** splay function **/
 	private void splay(SplayNode x)
 	{
-		//Add in output for n(x), n'(x), r(x), r'(x)
-		//output these after each splay substep...
-		//You can use a collection and output at the
-		//end using an iterator.
 		
 		while (x.getParent() != null)
 		{
 			//Adding my initial size and rank prior to my splay operation
-			RankAndSize newRAS = new RankAndSize(getSize(x), getRank(x));
+			RankAndSize newRAS = new RankAndSize(x.getData(), getSize(x), getRank(x));
 			
 			SplayNode Parent = x.getParent();
 			SplayNode GrandParent = Parent.getParent();
@@ -147,14 +149,19 @@ public class SplayTree {
 					}
 				}
 			}
-			//placing size and rank values in the RankAndSize
+			//placing new size and rank values in the RankAndSize
 			//object created prior
 			newRAS.setNPX(getSize(x));
 			newRAS.setRPX(getRank(x));
-			allRanksAndSizes.push(newRAS);
+			allRanksAndSizes.add(newRAS);
 		}
 		root = x;
 
+	}
+	
+	/** function to get size of node **/
+	public int getSize(Comparable r){
+		return getSize(new SplayNode(r));
 	}
 	
 	/** function to get size of node **/
@@ -163,10 +170,13 @@ public class SplayTree {
 			return 0;
 		return (getSize(r.getLeftChild()) + getSize(r.getRightChild()) + 1);
 	}
-	
+	/** function to get the rank of node using a node **/
+	public int getRank(Comparable r){
+		return getRank(new SplayNode(r));
+	}
 	/** function to get the rank of node using a node **/
 	public int getRank(SplayNode r){
-		return (int)Math.log10((double)getSize(r));
+		return (int) ( (int) Math.log(getSize(r)) / Math.log(2));
 	}
 	
 	/** function to remove minimum element **/
@@ -195,6 +205,8 @@ public class SplayTree {
 	public void remove(Comparable ele)
 	{
 		SplayNode node = findNode(ele);
+		if (node.getData().compareTo(ele) != 0)
+			return;
 		remove(node);
 	}
 
@@ -251,8 +263,10 @@ public class SplayTree {
 	private SplayNode findNode(Comparable ele)
 	{
 		SplayNode z = root;
+		SplayNode p = null;
 		while (z != null)
 		{
+			p = z;
 			if (ele.compareTo(z.getData()) > 0)  
 				z = z.getRightChild();
 			else if (ele.compareTo(z.getData()) < 0) 
@@ -262,33 +276,39 @@ public class SplayTree {
 				return z;
 			}
 		}
-		return null;
+		splay(p);
+		return p;
 	}
 	
 	/** function to retrieve the ranks and sizes **/
-	public Stack<RankAndSize> getAllRanksAndSizes(){
+	public ArrayList<RankAndSize> getAllRanksAndSizes(){
 		return allRanksAndSizes;
 	}
 
 	/** Function for inorder traversal **/ 
 	public void inorder()
 	{
+		System.out.println("Inorder");
 		inorder(root);
+		System.out.println(); //new line print
 	}
 	private void inorder(SplayNode r)
 	{
+		
 		if (r != null)
 		{
 			inorder(r.getLeftChild());
 			System.out.print(r.getData() +" ");
 			inorder(r.getRightChild());
 		}
+		
 	}
 
 	/** Function for preorder traversal **/
 	public void preorder()
 	{
 		preorder(root);
+		System.out.println(); //new line print
 	}
 	private void preorder(SplayNode r)
 	{
@@ -298,12 +318,14 @@ public class SplayTree {
 			preorder(r.getLeftChild());             
 			preorder(r.getRightChild());
 		}
+		
 	}
 
 	/** Function for postorder traversal **/
 	public void postorder()
 	{
 		postorder(root);
+		System.out.println(); //new line print
 	}
 	private void postorder(SplayNode r)
 	{
@@ -313,5 +335,6 @@ public class SplayTree {
 			postorder(r.getRightChild());
 			System.out.print(r.getData() +" ");
 		}
+		
 	}     
 }
