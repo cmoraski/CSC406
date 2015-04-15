@@ -4,30 +4,23 @@ package asgn04;
  * n(x), n'(x), r(x), r'(x)
  * for SplayTree  
  */
-public class RankAndSize {
+public class RankAndSize<T> {
 
-	//n(x)
-	private int nx;
-	//n'(x)
-	private int npx;
-	//r(x)
-	private int rx;
-	//r'(x)
-	private int rpx;
+	private T data;
+	//		   	n(x)   n'(x)   r(x)   r'(x)
+	private int	nx,	   npx,	   rx,    rpx;
+
 	
-	/** Constructor for full RankAndSize Class **/
-	public RankAndSize(int n, int np, int r, int rp){
-		nx = n;
-		npx = np;
-		rx = r;
-		rpx = rp;
-	}
-	/** Constructor for half RankAndSize Class 
-	 * other values should be added in after splay
+	/** 
+	 * Constructor for half RankAndSize Class 
+	 * other values should be added in ensuing splay
 	 */
-	public RankAndSize(int n, int r){
+	public RankAndSize(T d, int n, int r){
+		data = d;
 		nx = n;
 		rx = r;
+		npx = 0;
+		rpx = 0;
 	}
 	public void setNPX(int np){
 		npx = np;
@@ -52,8 +45,8 @@ public class RankAndSize {
 	}
 	
 	public String toString(){
-		return "n(x) = " + nx + " n'(x) = " + npx + "\nr(x) = " +
-				rx + " r'(x) = " + rpx;
+		return "Ranks and Sizes for subsplay operation on the data: " + data + "\nBefore: n(x) = " + 
+				nx + " r(x) = " + rx + "\nAfter: n'(x) = " + npx + " r'(x) = " + rpx;
 	}
 	
 }
